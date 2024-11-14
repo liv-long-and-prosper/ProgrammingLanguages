@@ -53,16 +53,8 @@ public class LanguageManager implements LanguageManagerInterface{
 
             String name = fields[0];
             String fileName = "./datafiles/"+fields[1];
-            String typeString = fields[2];
+            Language.Type type = LanguageInterface.Type.valueOf(fields[2].toUpperCase());
 
-            // Convert String typeString to LanguageInterface.Type
-            LanguageInterface.Type type;
-            switch (typeString){
-                case "Compiled": type = LanguageInterface.Type.COMPILED;break;
-                case "Interpreted": type = LanguageInterface.Type.INTERPRETED;break;
-                case "Scripting": type = LanguageInterface.Type.SCRIPTING;break;
-                default: type = LanguageInterface.Type.NUMERICAL_ANALYSIS;
-            }
             Language language = new Language(name, fileName, type);
             System.out.printf("Current language: %s\n-----------------------------\n", language.getName());
             languages[i] = language;
