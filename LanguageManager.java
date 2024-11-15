@@ -52,15 +52,17 @@ public class LanguageManager implements LanguageManagerInterface{
             String[] fields = line.split(",");
 
             String name = fields[0];
-            String fileName = "./datafiles/"+fields[1];
+
+//            String fileName = "./ProgrammingLanguages/datafiles/"+fields[1]; // fileName needed when running LanguageManagerTest
+
+            String fileName = "./datafiles/"+fields[1];// fileName needed when running Main.java
+
             Language.Type type = LanguageInterface.Type.valueOf(fields[2].toUpperCase());
 
             Language language = new Language(name, fileName, type);
-            System.out.printf("Current language: %s\n-----------------------------\n", language.getName());
             languages[i] = language;
-            System.out.println("Languages Array: "+Arrays.toString(languages)+"\n---------------------------------\n");
         }
-
+        sortLangs();
     }
 
     /**
@@ -84,10 +86,12 @@ public class LanguageManager implements LanguageManagerInterface{
      *
      * */
     public int findShortestKwdLength() {
-        int shortestKwdLength = languages[0].findShortestKwdLength();
+        int shortestKwdLength = 0;
         for(Language language : languages){
-            if (language.findShortestKwdLength() < shortestKwdLength){
-                shortestKwdLength = language.findLongestKwdLength();
+            if (language.findShortestKwdLength() > 0 && shortestKwdLength == 0){
+                shortestKwdLength = language.findShortestKwdLength();
+            } else if (language.findShortestKwdLength() < shortestKwdLength && language.findShortestKwdLength() > 0) {
+                shortestKwdLength = language.findShortestKwdLength();
             }
         }
         return shortestKwdLength;
@@ -164,15 +168,11 @@ public class LanguageManager implements LanguageManagerInterface{
 
         // initialize null array to be an array with length of matchCount
         langsWithMatches = new int[matchCount];
-        int lastMatchIndex = -1;
-
-        for (int i = 0; i < langsWithMatches.length; i++){
-            for(int j = 0; j < languages.length; j++){
-                int kwdFound = languages[j].findKwd(keyword);
-                if (kwdFound != -1 && j > lastMatchIndex){
-                    lastMatchIndex = j;
-                    langsWithMatches[i] = j;
-                }
+        int matchIdx = 0;
+        for(int i = 0; i < languages.length; i++){
+            if (languages[i].findKwd(keyword) != -1){
+                langsWithMatches[matchIdx] = i;
+                matchIdx++;
             }
         }
         return langsWithMatches;
@@ -187,26 +187,22 @@ public class LanguageManager implements LanguageManagerInterface{
         int matchCount = 0;
 
         for(Language lang : languages){
-            if(lang.getType() == type){
+            if(lang.getType().equals(type)){
                 matchCount++;
             }
         }
 
         langsOfType = new int[matchCount];
+        int langsIdx = 0;
 
-        for(int i = 0; i < langsOfType.length; i++){
-            int langsIndex = 0;
-            for(Language lang : languages){
-                if(lang.getType() == type){
-                    langsOfType[i] = langsIndex;
+        for(int i = 0; i < languages.length; i++){
+                if(languages[i].getType().equals(type)){
+                    langsOfType[langsIdx] = i;
+                    langsIdx++;
                 }
-                langsIndex++;
-            }
         }
-
         return langsOfType;
     }
-
 
     /**
      * {@inheritDoc}

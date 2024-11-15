@@ -57,9 +57,9 @@ public class Language implements LanguageInterface {
           kwdCount = fileScan.nextInt();
       }catch (FileNotFoundException e){
           kwdCount = 0;
-          System.out.printf("Error: %s", e.getMessage());
+          System.out.printf("Error: %s\n", e.getMessage());
           System.out.printf("%s does not contain any key words.\n" +
-                  "If you think this is a mistake, please verify the information contained in %s and try again.\n", name, fileName);
+                  "If you think this is a mistake, please verify the information contained in %s and try again.\n\n", name, fileName);
       }
 
           // Initialize array with keyword count
@@ -69,9 +69,7 @@ public class Language implements LanguageInterface {
               String kwd = fileScan.next();
               keywords[i] = kwd;
           }
-          System.out.println("Before sorting: "+Arrays.toString(keywords));
           sortKwds();
-          System.out.println("After sorting: "+Arrays.toString(keywords));
 
           if (fileScan != null) {
               fileScan.close();
@@ -137,9 +135,9 @@ public class Language implements LanguageInterface {
       }
        int kwdIdx = -1;
        for (int i = 0; i < keywords.length; i++){
-           if (keywords[i] == keyword){
+           if (keywords[i].equals(keyword)){
                kwdIdx = i;
-           };
+           }
        }
        return kwdIdx;
     }
@@ -148,6 +146,7 @@ public class Language implements LanguageInterface {
      * {@inheritDoc}
      * */
     public int findShortestKwdLength() {
+        if(keywords.length == 0){return -1;}
       int shortestKwd = keywords[0].length();
       for (String kwd : keywords){
             if (kwd.length() < shortestKwd){
@@ -161,6 +160,7 @@ public class Language implements LanguageInterface {
      * {@inheritDoc}
      * */
     public int findLongestKwdLength() {
+        if(keywords.length == 0){return -1;}
         int longestKwd = keywords[0].length();
         for (String kwd : keywords){
             if (kwd.length() > longestKwd){
@@ -188,7 +188,7 @@ public class Language implements LanguageInterface {
 
     public String toString(){
       int kwdCount = getKwdCount();
-      return " Language Name: "+name+" Language Type: "+type+" Keyword count: "+kwdCount;
+      return " Language Name: "+name+"\nLanguage Type: "+type+"\nKeyword count: "+kwdCount;
     }
 
 }
